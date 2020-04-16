@@ -69,12 +69,14 @@ void init()
     glEnable(GL_BLEND);                                 //display images with transparent
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
-//    M->loadChestImage("images/chest.png");              // load chest image
-//    M->placeChest(3,3);                                 // place chest in a grid
 
-//    M->loadSetOfArrowsImage("images/arrwset.png");      // load set of arrows image
-//    M->placeStArrws(5,3);                               // place set of arrows
+    M->generateTerrain();
+    M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
+    M->loadChestImage("images/chest.png");              // load chest image
+    M->placeChest(3,3);                                 // place chest in a grid
+
+    M->loadSetOfArrowsImage("images/arrwset.png");      // load set of arrows image
+    M->placeStArrws(5,3);                               // place set of arrows
 
     P->initPlayer(M->getGridSize(),"images/p.png",6);   // initialize player pass grid size,image and number of frames
     P->loadArrowImage("images/arr.png");                // Load arrow image
@@ -96,7 +98,6 @@ void display(void)
          M->drawBackground();           // Display Background
         glPopMatrix();
 
-
         for(int i=0; i<M->getGridSize();i++)
         {
            W[i].drawWall();
@@ -109,7 +110,7 @@ void display(void)
         glPushMatrix();
             P->drawArrow();             // Draw arrow when shoot
         glPopMatrix();
-/*
+
          glPushMatrix();
            M->drawChest();              // Draw chest
         glPopMatrix();
@@ -117,7 +118,7 @@ void display(void)
         glPushMatrix();
            M->drawArrows();             // Draw arrows pack
         glPopMatrix();
-*/
+
         glPushMatrix();
              playerActions();           // Draw Player move actions
         glPopMatrix();

@@ -13,9 +13,7 @@
 #include<iostream>
 #include <Timer.h>
 #include <math.h>       /* ceil */
-
-using namespace std;
-
+#include <vector>
 
 
 class Maze
@@ -46,13 +44,20 @@ class Maze
       bool liveChest;                     // status of the chest (collected or not)
       bool liveSetOfArrws;                // status of the arrows(collected or not)
 
+      void generateTerrain();
 
     protected:
 
       int gridSize;                       // grid size
       float unitWidth;                    // Unit width of the grid
 
+
     private:
+
+
+    void squareStep(vector<vector<int>>&,int,int,int,int,int);
+    void diamondStep(vector<vector<int>>&,int,int,int,int,int);
+    void mdp(vector<vector<int>>&,int,int,int);
 
       GLuint bakTex;                       // Handler for background texture
       GLuint ArrBnchTex;                   // Handler for set of arrows texture
