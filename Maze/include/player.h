@@ -43,6 +43,10 @@ class Player
         int action;                        // What action player do
         bool arrowStatus;                  // arrow is active or not
         bool livePlayer;                   // Player live or dead
+        bool activePlayer;                 // Player is selected
+
+        Timer *T = new Timer();            // Set Timer for animation
+
     protected:
 
         float t;                           // Ticker for animation

@@ -5,7 +5,6 @@
 
 #include <Player.h>
 
-Timer *T = new Timer();                             // Set Timer for animation
 
 Player::Player()
 {
@@ -17,6 +16,7 @@ Player::Player()
     arrowStatus = false;
     livePlayer = true;
     action= 0;
+    activePlayer = false;
 }
 
 Player::~Player()
@@ -279,8 +279,6 @@ void Player::movePlayer(char* dir, int frames)
 
      }
 
-
-    drawplayer();
 }
 
 GridLoc Player::getPlayerLoc()

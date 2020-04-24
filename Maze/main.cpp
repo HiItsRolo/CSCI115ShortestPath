@@ -34,6 +34,8 @@ Timer *T0 = new Timer();                     // animation timer
 float wWidth, wHeight;                       // display window width and Height
 int xPos,yPos;                               // Viewport mapping
 
+int destX, destY;
+
 
 void display(void);                          // Main Display : this runs in a loop
 void playerActions();
@@ -70,7 +72,7 @@ void init()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-    M->generateTerrain();
+   // M->generateTerrain();
     M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
     M->loadChestImage("images/chest.png");              // load chest image
     M->placeChest(3,3);                                 // place chest in a grid
@@ -79,8 +81,7 @@ void init()
     M->placeStArrws(5,3);                               // place set of arrows
 
     P->initPlayer(M->getGridSize(),"images/p.png",6);   // initialize player pass grid size,image and number of frames
-    P->loadArrowImage("images/arr.png");                // Load arrow image
-    P->placePlayer(6,0);                                // Place player
+    P->placePlayer(3,0);                                // Place player
 
     for(int i=0; i< M->getGridSize();i++)
     {
@@ -119,14 +120,15 @@ void display(void)
            M->drawArrows();             // Draw arrows pack
         glPopMatrix();
 
-        glPushMatrix();
-             playerActions();           // Draw Player move actions
-        glPopMatrix();
+     //   glPushMatrix();
+           //  playerActions();           // Draw Player move actions
+     //   glPopMatrix();
 
 
     glutSwapBuffers();
 }
 
+/*
 void playerActions()
 {
      // Your path code is here
@@ -143,13 +145,14 @@ void playerActions()
      else if(P->action ==4)P->movePlayer("right",6);
      else P->movePlayer("stand",6);
 }
+*/
 
 void key(unsigned char key, int x, int y)
 {
     switch (key)
     {
         case ' ':
-             P->shootArrow();           // Shoot (optional )
+          //   P->shootArrow();           // Shoot (optional )
         break;
         case 27 :                       // esc key to exit
         case 'q':
@@ -181,25 +184,27 @@ void key(unsigned char key, int x, int y)
     xPos =(int) (posX *M->getGridSize()/2 +M->getGridSize()/2); // update mouse position X
     yPos =(int) (posY *M->getGridSize()/2 +M->getGridSize()/2);
 
-    cout<<"Mouse Click location : "<< xPos<<" "<<yPos <<endl;   // print out grid value
+   // cout<<"Mouse Click location : "<< xPos<<" "<<yPos <<endl;   // print out grid value
+}
+
+void movePlayer(Player* character, string direction, int frames){
+    if(character->steps > character->unitWidth){
+        character->steps =0;
+    }
+    else{
+        if(character->activePlayer){
+            character->movePlayer("up",frames);
+        }
+    }
 }
 
  void idle(void)
 {
    //Your Code in this section
-    if(T0->GetTicks()>300)
+    if(T0->GetTicks()>30)
       {
-        // This is to make sure player move one unit
-        // And change direction
-        if(P->steps >=P->unitWidth)
-          {
-            // if player is off the center of grid, place it right
-            // This may make you player jumpy a bit
-            // you can get rid of this line if your player not messing your path
-            P->placePlayer(P->getPlayerLoc().x,P->getPlayerLoc().y);
-            P->action = (rand()%4)+1; // your code should plug here
-            P->steps =0;
-          }
+
+       movePlayer(P,"up",6);//check for active is inside movePlayer function. add here instead
 
          T0->Reset();
       }
@@ -210,20 +215,29 @@ void key(unsigned char key, int x, int y)
 void mouse(int btn, int state, int x, int y){
 
     switch(btn){
-        case GLUT_LEFT_BUTTON:
+        case GLUT_LEFT_BUTTON: // left mouse button for picking player
 
         if(state==GLUT_DOWN){
 
               GetOGLPos(x,y);
+
+              if (xPos == P->getPlayerLoc().x && yPos == P->getPlayerLoc().y){
+                P->activePlayer = true;
+                //set all other players to false
+              }
+
              }
             break;
 
 
-      case GLUT_RIGHT_BUTTON:
+      case GLUT_RIGHT_BUTTON: // right mouse button for picking destination
 
         if(state==GLUT_DOWN){
 
               GetOGLPos(x,y);
+              destX = xPos;
+              destY = yPos;
+
             }
             break;
     }
@@ -235,7 +249,7 @@ void Specialkeys(int key, int x, int y)
      cout<<"Player Location  :  "<<P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
     switch(key)
     {
-    case GLUT_KEY_UP:
+ /*   case GLUT_KEY_UP:
         P->action =1;
          break;
 
@@ -250,6 +264,7 @@ void Specialkeys(int key, int x, int y)
     case GLUT_KEY_RIGHT:
         P->action =4;
          break;
+   */
    }
    // comment this after you debug
 
