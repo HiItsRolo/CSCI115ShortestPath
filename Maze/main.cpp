@@ -21,6 +21,8 @@
 #include <wall.h>
 #include <math.h>
 
+#include <bits/stdc++.h>
+
 /* GLUT callback Handlers */
 
 using namespace std;
@@ -29,12 +31,25 @@ Maze *M = new Maze(8);                       // Set Maze grid size
 Player *P = new Player();                    // create player
 
 wall W[100];                                 // wall with number of bricks
+
+wall highlighter[100];
+
 Timer *T0 = new Timer();                     // animation timer
+
+Timer *T1 = new Timer();                     // animation timer
+
 
 float wWidth, wHeight;                       // display window width and Height
 int xPos,yPos;                               // Viewport mapping
 
+string dir[20];
+int counter = 0;
+
+
+
+
 int destX, destY;
+bool playerSelected = false;
 
 
 void display(void);                          // Main Display : this runs in a loop
@@ -64,9 +79,11 @@ void init()
     glLoadIdentity();
 
     glClearColor(0.0,0.0,0.0,0.0);
+    glEnable(GL_COLOR_MATERIAL);
     gluOrtho2D(0, wWidth, 0, wHeight);
 
-    T0->Start();                                        // set timer to 0
+    T0->Start();
+    T1->Start();                                       // set timer to 0
 
     glEnable(GL_BLEND);                                 //display images with transparent
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -86,7 +103,15 @@ void init()
     for(int i=0; i< M->getGridSize();i++)
     {
       W[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
-      W[i].placeWall(i,5);                              // place each brick
+      W[i].placeWall(i,5);
+
+      highlighter[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
+      highlighter[i].placeWall(-1,-1);
+
+      highlighter[i].red= 1.0;
+      highlighter[i].green= 0.0;
+      highlighter[i].blue= 0.0;
+      highlighter[i].alpha= 0.4;
     }
     W[5].placeWall(0,3);                                // moved 5th brick away
 }
@@ -102,6 +127,7 @@ void display(void)
         for(int i=0; i<M->getGridSize();i++)
         {
            W[i].drawWall();
+           highlighter[i].drawWall();
         }
 
         glPushMatrix();
@@ -120,9 +146,9 @@ void display(void)
            M->drawArrows();             // Draw arrows pack
         glPopMatrix();
 
-     //   glPushMatrix();
-           //  playerActions();           // Draw Player move actions
-     //   glPopMatrix();
+        glPushMatrix();
+             P->drawplayer();           // Draw Player move actions
+        glPopMatrix();
 
 
     glutSwapBuffers();
@@ -188,23 +214,39 @@ void key(unsigned char key, int x, int y)
 }
 
 void movePlayer(Player* character, string direction, int frames){
+
+   char* buffer = new char[direction.length()];
+
+
+   strcpy(buffer,direction.c_str());
+
     if(character->steps > character->unitWidth){
         character->steps =0;
+        strcpy(buffer,"stand");
+        character->placePlayer(character->getPlayerLoc().x,character->getPlayerLoc().y);
+        if(T1->GetTicks()>500){
+            counter++;
+            T1->Reset();
+        }
     }
     else{
         if(character->activePlayer){
-            character->movePlayer("up",frames);
+            character->movePlayer(buffer,frames);
         }
+        delete []buffer;
     }
 }
 
  void idle(void)
 {
    //Your Code in this section
-    if(T0->GetTicks()>30)
+    if(T0->GetTicks()>30 && counter<8)
       {
 
-       movePlayer(P,"up",6);//check for active is inside movePlayer function. add here instead
+
+
+
+         movePlayer(P,dir[counter],6);//check for active is inside movePlayer function. add here instead
 
          T0->Reset();
       }
@@ -223,6 +265,7 @@ void mouse(int btn, int state, int x, int y){
 
               if (xPos == P->getPlayerLoc().x && yPos == P->getPlayerLoc().y){
                 P->activePlayer = true;
+                playerSelected = true;
                 //set all other players to false
               }
 
@@ -235,8 +278,27 @@ void mouse(int btn, int state, int x, int y){
         if(state==GLUT_DOWN){
 
               GetOGLPos(x,y);
-              destX = xPos;
-              destY = yPos;
+
+              if(playerSelected){
+                destX = xPos;
+                destY = yPos;
+
+                highlighter[0].placeWall(7,0);
+                highlighter[1].placeWall(8,0);
+
+                dir[0] = "up";// algorithm called here. Should genereate these steps
+                dir[1] = "up";
+                dir[2] = "up";
+                dir[3] = "right";
+                dir[4] = "right";
+                dir[5] = "down";
+                dir[6] = "left";
+
+                counter = 0;
+
+
+                playerSelected = false;
+              }
 
             }
             break;

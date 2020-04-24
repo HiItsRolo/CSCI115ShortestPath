@@ -30,6 +30,7 @@ class wall
             int gridSize;                  // grid size
 
             bool liveWall;                 // wall status (broken or not)
+            float red,green,blue,alpha;
     protected:
 
     private:

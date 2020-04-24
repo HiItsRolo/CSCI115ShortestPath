@@ -13,6 +13,8 @@ wall::wall()
 {
     //ctor
     liveWall = true;
+
+    red=green=blue=alpha = 1.0;
 }
 
 wall::~wall()
@@ -32,7 +34,7 @@ void wall::drawWall()
     if(liveWall)
     {
 
-    glColor3f(1.0,1.0,1.0);
+    glColor4f(red,green,blue,alpha);
     glBindTexture(GL_TEXTURE_2D,wallTex);
 
     glPushMatrix();
