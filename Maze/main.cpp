@@ -21,16 +21,41 @@
 #include <wall.h>
 #include <math.h>
 
+#include <beach.h>
+#include <desert.h>
+#include <foothills.h>
+#include <forest.h>
+#include <hmountain.h>
+#include <mmountain.h>
+#include <ocean.h>
+#include <plain.h>
+
+
 #include <bits/stdc++.h>
+
+#include <vector>
 
 /* GLUT callback Handlers */
 
 using namespace std;
 
-Maze *M = new Maze(8);                       // Set Maze grid size
+const int gridSize = 8;
+
+
+Maze *M = new Maze(gridSize);                       // Set Maze grid size
 Player *P = new Player();                    // create player
 
 wall W[100];                                 // wall with number of bricks
+
+vector<beach>BT;
+vector<desert>DT;
+vector<foothills>HT;
+vector<forest>FT;
+vector<hmountain>TT;
+vector<mmountain>MT;
+vector<ocean>OT;
+vector<plain>PT;
+
 
 wall highlighter[100];
 
@@ -44,8 +69,6 @@ int xPos,yPos;                               // Viewport mapping
 
 string dir[20];
 int counter = 0;
-
-
 
 
 int destX, destY;
@@ -90,15 +113,20 @@ void init()
 
 
    // M->generateTerrain();
-    M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
-    M->loadChestImage("images/chest.png");              // load chest image
-    M->placeChest(3,3);                                 // place chest in a grid
 
-    M->loadSetOfArrowsImage("images/arrwset.png");      // load set of arrows image
-    M->placeStArrws(5,3);                               // place set of arrows
+    M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
 
     P->initPlayer(M->getGridSize(),"images/p.png",6);   // initialize player pass grid size,image and number of frames
-    P->placePlayer(3,0);                                // Place player
+    P->placePlayer(3,0);   // Place player
+
+    cout << HT.size();
+    TT.push_back(hmountain());
+    TT[0].hmountainInit(M->getGridSize(),"images/mountain.png");
+    TT[0].placehmountain(0,0);
+    TT.push_back(hmountain());
+    TT[1].hmountainInit(M->getGridSize(),"images/mountain.png");
+    TT[1].placehmountain(0,1);
+
 
     for(int i=0; i< M->getGridSize();i++)
     {
@@ -130,20 +158,12 @@ void display(void)
            highlighter[i].drawWall();
         }
 
+        TT[0].drawhmountain();
+        TT[1].drawhmountain();
+
+
         glPushMatrix();
             M->drawGrid();              // Draw the grid
-        glPopMatrix();
-
-        glPushMatrix();
-            P->drawArrow();             // Draw arrow when shoot
-        glPopMatrix();
-
-         glPushMatrix();
-           M->drawChest();              // Draw chest
-        glPopMatrix();
-
-        glPushMatrix();
-           M->drawArrows();             // Draw arrows pack
         glPopMatrix();
 
         glPushMatrix();

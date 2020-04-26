@@ -171,12 +171,12 @@
 
 1585361758 c:\users\dhanyu\desktop\maze\include\test.h
 
-1587692677 source:c:\users\rolo\documents\github\csci115shortestpath\maze\src\maze.cpp
+1587849009 source:c:\users\rolo\documents\github\csci115shortestpath\maze\src\maze.cpp
 	<Maze.h>
 	<fstream>
 	<vector>
 
-1587003945 c:\users\rolo\documents\github\csci115shortestpath\maze\include\maze.h
+1587849009 c:\users\rolo\documents\github\csci115shortestpath\maze\include\maze.h
 	<CommonThings.h>
 	<string.h>
 	<gl/gl.h>
@@ -239,7 +239,7 @@
 	<Timer.h>
 	<math.h>
 
-1587698438 source:c:\users\rolo\documents\github\csci115shortestpath\maze\main.cpp
+1587863865 source:c:\users\rolo\documents\github\csci115shortestpath\maze\main.cpp
 	<string.h>
 	<CommonThings.h>
 	<Maze.h>
@@ -251,5 +251,126 @@
 	<stdlib.h>
 	<wall.h>
 	<math.h>
+	<beach.h>
+	<desert.h>
+	<foothills.h>
+	<forest.h>
+	<hmountain.h>
+	<mmountain.h>
+	<ocean.h>
+	<plain.h>
 	<bits/stdc++.h>
+	<vector>
+
+1587844165 c:\users\rolo\documents\github\csci115shortestpath\maze\include\hmountain.h
+	<CommonThings.h>
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	<Timer.h>
+	<math.h>
+
+1587844165 source:c:\users\rolo\documents\github\csci115shortestpath\maze\src\hmountain.cpp
+	<hmountain.h>
+	<iostream>
+
+1587855396 source:c:\users\rolo\documents\github\csci115shortestpath\maze\src\beach.cpp
+	<beach.h>
+	<iostream>
+
+1587855396 c:\users\rolo\documents\github\csci115shortestpath\maze\include\beach.h
+	<CommonThings.h>
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	<Timer.h>
+	<math.h>
+
+1587855396 source:c:\users\rolo\documents\github\csci115shortestpath\maze\src\desert.cpp
+	<desert.h>
+	<iostream>
+
+1587855396 c:\users\rolo\documents\github\csci115shortestpath\maze\include\desert.h
+	<CommonThings.h>
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	<Timer.h>
+	<math.h>
+
+1587855396 source:c:\users\rolo\documents\github\csci115shortestpath\maze\src\foothills.cpp
+	<foothills.h>
+	<iostream>
+
+1587855396 c:\users\rolo\documents\github\csci115shortestpath\maze\include\foothills.h
+	<CommonThings.h>
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	<Timer.h>
+	<math.h>
+
+1587855396 source:c:\users\rolo\documents\github\csci115shortestpath\maze\src\forest.cpp
+	<forest.h>
+	<iostream>
+
+1587855396 c:\users\rolo\documents\github\csci115shortestpath\maze\include\forest.h
+	<CommonThings.h>
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	<Timer.h>
+	<math.h>
+
+1587855397 source:c:\users\rolo\documents\github\csci115shortestpath\maze\src\mmountain.cpp
+	<mmountain.h>
+	<iostream>
+
+1587855397 c:\users\rolo\documents\github\csci115shortestpath\maze\include\mmountain.h
+	<CommonThings.h>
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	<Timer.h>
+	<math.h>
+
+1587855397 source:c:\users\rolo\documents\github\csci115shortestpath\maze\src\ocean.cpp
+	<ocean.h>
+	<iostream>
+
+1587855397 c:\users\rolo\documents\github\csci115shortestpath\maze\include\ocean.h
+	<CommonThings.h>
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	<Timer.h>
+	<math.h>
+
+1587855397 source:c:\users\rolo\documents\github\csci115shortestpath\maze\src\plain.cpp
+	<plain.h>
+	<iostream>
+
+1587855397 c:\users\rolo\documents\github\csci115shortestpath\maze\include\plain.h
+	<CommonThings.h>
+	<string.h>
+	<gl/gl.h>
+	<GL/glut.h>
+	<SOIL.h>
+	<iostream>
+	<Timer.h>
+	<math.h>
 

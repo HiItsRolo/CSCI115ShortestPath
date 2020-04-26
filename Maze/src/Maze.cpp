@@ -16,8 +16,6 @@ Maze::Maze(int gSize)                                        // Constructor
     //ctor
     gridSize = gSize;
     unitWidth = (float)2/gridSize;
-    liveChest = true;
-    liveSetOfArrws=true;
 
 }
 
@@ -27,56 +25,11 @@ Maze::~Maze()
 }
 
 
-
-
-void Maze::loadChestImage(char* FileName)
-{
-    chestTex = TextureLoader(FileName);
-}
-
 void Maze::loadBackgroundImage(char* FileName)
 {
    bakTex = TextureLoader(FileName);
 }
 
-void Maze::loadSetOfArrowsImage(char* FileName)
-{
-    ArrBnchTex =  TextureLoader(FileName);
-}
-
-void Maze::placeChest(int x, int y)
-{
-   chestLoc.x =  converter(x,y).x;
-   chestLoc.y =  converter(x,y).y;
-}
-
-void Maze::placeStArrws(int x, int y)
-{
-   setOfArrsLoc.x =  converter(x,y).x;
-   setOfArrsLoc.y =  converter(x,y).y;
-}
-
-
-
-GridLoc Maze::GetChestLoc()
-{
-   GridLoc val;
-
-   val.x = (int)(ceil((chestLoc.x +(1-unitWidth))/unitWidth));
-   val.y = (int)(ceil((chestLoc.y +(1-unitWidth))/unitWidth));
-
-   return val;
-}
-
-GridLoc Maze::GetStArrwsLoc()
-{
-    GridLoc val;
-
-   val.x = (int)(ceil((setOfArrsLoc.x +(1-unitWidth))/unitWidth));
-   val.y = (int)(ceil((setOfArrsLoc.y +(1-unitWidth))/unitWidth));
-
-   return val;
-}
 
 
 int Maze::getGridSize()
@@ -126,63 +79,6 @@ void Maze::drawGrid()
     glEnable(GL_TEXTURE_2D);
 }
 
-void Maze::drawArrows()
-{
-    if(liveSetOfArrws)
-    {
-
-    glColor3f(1.0,1.0,1.0);
-
-    glTranslatef(setOfArrsLoc.x,setOfArrsLoc.y,1.0);
-    glRotated(-spin,0,0,1);
-
-    glBindTexture(GL_TEXTURE_2D,ArrBnchTex);
-    glScaled(1.0/(float)(gridSize),1.0/(float)(gridSize),1.0);
-
-    glBegin(GL_QUADS);
-        glTexCoord2f(0,1);
-        glVertex3f(1,-1,0.0f);
-
-       glTexCoord2f(0,0);
-        glVertex3f(1,1,0.0f);
-
-        glTexCoord2f(1,0);
-        glVertex3f(-1,1,0.0f);
-
-        glTexCoord2f(1,1);
-        glVertex3f(-1,-1,0.0f);
-     glEnd();
-    }
-}
-
-void Maze::drawChest()
-{
-    if(liveChest){
-    glColor3f(1.0,1.0,1.0);
-
-    glTranslatef(chestLoc.x,chestLoc.y,1.0);
-
-    glBindTexture(GL_TEXTURE_2D,chestTex);
-    glScaled(1.0/(float)(gridSize+5),1.0/(float)(gridSize+5),1.0);
-    glRotated(spin,0,0,1);
-
-    glBegin(GL_QUADS);
-        glTexCoord2f(0,1);
-        glVertex3f(1,-1,0.0f);
-
-       glTexCoord2f(0,0);
-        glVertex3f(1,1,0.0f);
-
-        glTexCoord2f(1,0);
-        glVertex3f(-1,1,0.0f);
-
-        glTexCoord2f(1,1);
-        glVertex3f(-1,-1,0.0f);
-     glEnd();
-
-     spin +=0.5;
-    }
-}
 
 loc Maze::converter(int x, int y)
 {
