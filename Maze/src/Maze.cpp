@@ -238,7 +238,7 @@ void Maze::generateTerrain() { //function to procedurally generate terrain using
                 myfile << "T"; //High Mountain
             }
 
-            cout << "(" << q << "," << r << ")" << temp[q][r] << endl; // for debugging purposes
+         //   cout << "(" << q << "," << r << ")" << temp[q][r] << endl; // for debugging purposes
         }
         myfile << "\n"; // creates a new line after each column value for that row has been written
     }

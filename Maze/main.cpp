@@ -30,6 +30,8 @@
 #include <ocean.h>
 #include <plain.h>
 
+#include <fstream>
+
 
 #include <bits/stdc++.h>
 
@@ -39,22 +41,19 @@
 
 using namespace std;
 
-const int gridSize = 8;
 
-
-Maze *M = new Maze(gridSize);                       // Set Maze grid size
+Maze *M = new Maze(17);                       // Set Maze grid size
 Player *P = new Player();                    // create player
 
-wall W[100];                                 // wall with number of bricks
-
-vector<beach>BT;
-vector<desert>DT;
-vector<foothills>HT;
-vector<forest>FT;
-vector<hmountain>TT;
-vector<mmountain>MT;
-vector<ocean>OT;
-vector<plain>PT;
+//vector <wall> W;                                 // wall
+vector<beach>BT;                             //beach array for graphics
+vector<desert>DT;                            //desert array for graphics
+vector<foothills>HT;                        //foothills array for graphics
+vector<forest>FT;                           //forest array for graphics
+vector<hmountain>TT;                        //high mountain array for graphics
+vector<mmountain>MT;                        //mid mountain array for graphics
+vector<ocean>OT;                            //ocean array for graphics
+vector<plain>PT;                            //plain array for graphics
 
 
 wall highlighter[100];
@@ -112,22 +111,121 @@ void init()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-   // M->generateTerrain();
+    M->generateTerrain();
 
     M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
 
     P->initPlayer(M->getGridSize(),"images/p.png",6);   // initialize player pass grid size,image and number of frames
     P->placePlayer(3,0);   // Place player
 
-    cout << HT.size();
-    TT.push_back(hmountain());
-    TT[0].hmountainInit(M->getGridSize(),"images/mountain.png");
-    TT[0].placehmountain(0,0);
-    TT.push_back(hmountain());
-    TT[1].hmountainInit(M->getGridSize(),"images/mountain.png");
-    TT[1].placehmountain(0,1);
+
+    for(int i = 0; i < 1; i++){ //loads level from text file and will add graphics according to characters in text file
+        int y = M->getGridSize()-1; //start at top left (y = gridsize-1)
+        //int Wcount = 0;
+        int BTcount = 0;
+        int DTcount = 0;
+        int HTcount = 0;
+        int FTcount = 0;
+        int TTcount = 0;
+        int MTcount = 0;
+        int OTcount = 0;
+        int PTcount = 0;
+        ifstream read;
+        read.open("terrain.txt");
+        string line;
+        while (getline(read,line)){
+            int x = 0;
+            for(char &c : line){
+
+                if (c == 'O'){
+          /*          W.push_back(wall());
+                    W[Wcount].wallInit(M->getGridSize(),"images/ocean.png");
+                    W[Wcount].placeWall(x,y);
+                    Wcount++;*/
+                    OT.push_back(ocean());
+                    OT[OTcount].oceanInit(M->getGridSize(),"images/ocean.png");
+                    OT[OTcount].placeocean(x,y);
+                    OTcount++;
+                }
+                if (c == 'B'){
+/*                    W.push_back(wall());
+                    W[Wcount].wallInit(M->getGridSize(),"images/beach.png");
+                    W[Wcount].placeWall(x,y);
+                    Wcount++;*/
+                    BT.push_back(beach());
+                    BT[BTcount].beachInit(M->getGridSize(),"images/beach.png");
+                    BT[BTcount].placebeach(x,y);
+                    BTcount++;
+                }
+                if (c == 'D'){
+/*                    W.push_back(wall());
+                    W[Wcount].wallInit(M->getGridSize(),"images/desert.png");
+                    W[Wcount].placeWall(x,y);
+                    Wcount++;*/
+                    DT.push_back(desert());
+                    DT[DTcount].desertInit(M->getGridSize(),"images/desert.png");
+                    DT[DTcount].placedesert(x,y);
+                    DTcount++;
+                }
+                if (c == 'F'){
+/*                    W.push_back(wall());
+                    W[Wcount].wallInit(M->getGridSize(),"images/forest.png");
+                    W[Wcount].placeWall(x,y);
+                    Wcount++;*/
+                    FT.push_back(forest());
+                    FT[FTcount].forestInit(M->getGridSize(),"images/forest.png");
+                    FT[FTcount].placeforest(x,y);
+                    FTcount++;
+                }
+
+                if (c == 'P'){
+/*                   W.push_back(wall());
+                    W[Wcount].wallInit(M->getGridSize(),"images/plains.png");
+                    W[Wcount].placeWall(x,y);
+                    Wcount++;*/
+                    PT.push_back(plain());
+                    PT[PTcount].plainInit(M->getGridSize(),"images/plains.png");
+                    PT[PTcount].placeplain(x,y);
+                    PTcount++;
+                }
+                if (c == 'H'){
+/*                    W.push_back(wall());
+                    W[Wcount].wallInit(M->getGridSize(),"images/foothills.png");
+                    W[Wcount].placeWall(x,y);
+                    Wcount++;*/
+                    HT.push_back(foothills());
+                    HT[HTcount].foothillsInit(M->getGridSize(),"images/foothills.png");
+                    HT[HTcount].placefoothills(x,y);
+                    HTcount++;
+                }
+                if (c == 'M'){
+/*                    W.push_back(wall());
+                    W[Wcount].wallInit(M->getGridSize(),"images/mountain.png");
+                    W[Wcount].placeWall(x,y);
+                    Wcount++;*/
+                    MT.push_back(mmountain());
+                    MT[MTcount].mmountainInit(M->getGridSize(),"images/mountain.png");
+                    MT[MTcount].placemmountain(x,y);
+                    MTcount++;
+                }
+                if (c == 'T'){
+/*                    W.push_back(wall());
+                    W[Wcount].wallInit(M->getGridSize(),"images/mountainpeak.png");
+                    W[Wcount].placeWall(x,y);
+                    Wcount++;*/
+                    TT.push_back(hmountain());
+                    TT[TTcount].hmountainInit(M->getGridSize(),"images/mountainpeak.png");
+                    TT[TTcount].placehmountain(x,y);
+                    TTcount++;
+                }
+                x++;
+            }
+            y--;
+        }
+    }
 
 
+/*)
     for(int i=0; i< M->getGridSize();i++)
     {
       W[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
@@ -142,6 +240,7 @@ void init()
       highlighter[i].alpha= 0.4;
     }
     W[5].placeWall(0,3);                                // moved 5th brick away
+*/
 }
 
 void display(void)
@@ -152,14 +251,48 @@ void display(void)
          M->drawBackground();           // Display Background
         glPopMatrix();
 
-        for(int i=0; i<M->getGridSize();i++)
+        /*for(int i=0; i<M->getGridSize();i++)
         {
            W[i].drawWall();
            highlighter[i].drawWall();
+        }*/
+
+/*        for(int i=0; i< W.size(); i++){
+            W[i].drawWall();
+        }*/
+
+        for(int i=0;i< OT.size();i++){
+            OT[i].drawocean();           //display ocean tiles
         }
 
-        TT[0].drawhmountain();
-        TT[1].drawhmountain();
+        for(int i=0;i< BT.size();i++){
+            BT[i].drawbeach();          //display beach tiles
+        }
+
+        for(int i=0;i< DT.size();i++){
+            DT[i].drawdesert();         //display desert tiles
+        }
+
+        for(int i=0;i< FT.size();i++){
+            FT[i].drawforest();         //display forest tiles
+        }
+
+        for(int i=0;i< PT.size();i++){
+            PT[i].drawplain();          //display plain tiles
+        }
+
+        for(int i=0;i< HT.size();i++){
+            HT[i].drawfoothills();      //display foothills tiles
+        }
+
+        for(int i=0;i< MT.size();i++){
+            MT[i].drawmmountain();      //display mid mountain tiles
+        }
+
+        for(int i=0;i< TT.size();i++){
+            TT[i].drawhmountain();      //display high mountain tiles
+        }
+
 
 
         glPushMatrix();
