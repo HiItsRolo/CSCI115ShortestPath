@@ -41,9 +41,11 @@
 
 using namespace std;
 
-
-Maze *M = new Maze(17);                       // Set Maze grid size
+const int num = 17;
+Maze *M = new Maze(num);                       // Set Maze grid size
 Player *P = new Player();                    // create player
+
+char level[num][num];
 
 //vector <wall> W;                                 // wall
 vector<beach>BT;                             //beach array for graphics
@@ -135,7 +137,9 @@ void init()
         string line;
         while (getline(read,line)){
             int x = 0;
-            for(char &c : line){
+            for(char c : line){
+
+                level[x][y] = c;
 
                 if (c == 'O'){
           /*          W.push_back(wall());
@@ -147,6 +151,7 @@ void init()
                     OT[OTcount].placeocean(x,y);
                     OTcount++;
                 }
+
                 if (c == 'B'){
 /*                    W.push_back(wall());
                     W[Wcount].wallInit(M->getGridSize(),"images/beach.png");
@@ -156,7 +161,9 @@ void init()
                     BT[BTcount].beachInit(M->getGridSize(),"images/beach.png");
                     BT[BTcount].placebeach(x,y);
                     BTcount++;
+                    level[x][y]='B';
                 }
+
                 if (c == 'D'){
 /*                    W.push_back(wall());
                     W[Wcount].wallInit(M->getGridSize(),"images/desert.png");
@@ -167,6 +174,7 @@ void init()
                     DT[DTcount].placedesert(x,y);
                     DTcount++;
                 }
+
                 if (c == 'F'){
 /*                    W.push_back(wall());
                     W[Wcount].wallInit(M->getGridSize(),"images/forest.png");
@@ -219,6 +227,7 @@ void init()
                     TTcount++;
                 }
                 x++;
+
             }
             y--;
         }
