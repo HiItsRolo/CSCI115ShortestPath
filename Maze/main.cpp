@@ -47,6 +47,8 @@ Player *P = new Player();                    // create player
 
 char level[num][num];
 
+int nodes[y*gridsize + x]
+
 //vector <wall> W;                                 // wall
 vector<beach>BT;                             //beach array for graphics
 vector<desert>DT;                            //desert array for graphics
