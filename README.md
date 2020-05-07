@@ -1,6 +1,7 @@
 # CSCI115ShortestPath
 Project for class using dijkstra shortest path algorithm and midpoint algorithm for terrain generation.
-
+Rogelio Romero's work: Terrain Generation algorithm, Graphical Elements, Player Spawn Logic, Movement Implementation, Bug Fixes, Cost matrices.
+Guanxiong Wang's work: shortest path algorithm: Dins function, SP function, dirPath, printSP and printDir functions.
 ========================================================================================================
 
 TERRAIN GENERATION
@@ -120,6 +121,32 @@ MOVEMENT
 
 
 ---------------------------------------------------------------------------------------------------------
+
+SHORTEST PATH
+
+-Dins:             This function can return a distance(integer) when you put in Adjacent origin and destination terrain. 
+                   This function can help us to calculate the shortest path.
+
+-SP:               This is the shortest path function. It is a bit different from Dijkstra's algorithm. 
+                   I changed Ëûthe stop condition from traversing the whole map to stopping when the destination is found. 
+				   We will put the coordinates of the starting point and the coordinates of the destination(xpos,ypos,xtar,ytar).
+				   Then it will calculate the shortest path and then store it in a 2D vector 
+				   called pi(It contains the coordinates of the predecessor. data type: pair<int,int>). 
+				   It works the same as Dijkstra, looking for a point with the smallest dis, 
+				   marking it as visited and updating the dis of the points around it until it finds the target point. 
+				   It may also be trapped. For example, if the character walks to a corner or all points around it are visited, 
+				   then we will look for the next point that can move to continue to find the destination point.
+
+-dirPath:          
+                   This function can generate the shortest path from pi and store it in a string array(contains "left""right""top""bottom"). 
+				   And the character can use this to move
+-printSP and printDir:     Just help us to check the shortest path generation.
+
+
+
+
+
+
 
 TO-DO
 
