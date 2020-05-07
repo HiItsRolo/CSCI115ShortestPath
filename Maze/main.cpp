@@ -89,26 +89,8 @@ bool playerSelected = false;
 
 
 vector<vector<pair<int, int>>>pi;           //pi contains the shortest path
-	pi.resize(num);
-	for (int i = 0;i < num;i++) {
-		pi[i].resize(num);
-	}
-	for (int i = 0;i < num;i++) {
-		for (int j = 0;j < num;j++) {
-			pi[i][j].first = -1;
-			pi[i][j].second = -1;
-		}
-	}
-	vector<vector<int>> dis;            //dis contains distance
-	dis.resize(num);
-	for (int i = 0;i < num;i++) {
-		dis[i].resize(num);
-	}
-	for (int i = 0;i < num;i++) {
-		for (int j = 0;j < num;j++) {
-			dis[i][j] = INT_MAX;
-		}
-	}
+
+vector<vector<int>> dis;            //dis contains distance
 
 
 
@@ -637,6 +619,29 @@ void resize(int width, int height)           // resizing case on the window
 
 void init()
 {
+    	pi.resize(num);
+	for (int i = 0;i < num;i++) {
+		pi[i].resize(num);
+	}
+	for (int i = 0;i < num;i++) {
+		for (int j = 0;j < num;j++) {
+			pi[i][j].first = -1;
+			pi[i][j].second = -1;
+		}
+	}
+
+		dis.resize(num);
+	for (int i = 0;i < num;i++) {
+		dis[i].resize(num);
+	}
+	for (int i = 0;i < num;i++) {
+		for (int j = 0;j < num;j++) {
+			dis[i][j] = INT_MAX;
+		}
+	}
+
+
+
     glEnable(GL_COLOR_MATERIAL);
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
