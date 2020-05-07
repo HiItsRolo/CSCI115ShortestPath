@@ -82,15 +82,10 @@ string dir[num*num];                             //direction movement array. (nu
 
 int counter = 0;                        //counter for actions = 0
 
-int dircount = 0;                           //count of how much actions are to be taken
+int length = 0;                           //count of how much actions are to be taken
 
 int destX, destY;
 bool playerSelected = false;
-
-
-vector<vector<pair<int, int>>>pi;           //pi contains the shortest path
-
-vector<vector<int>> dis;            //dis contains distance
 
 
 
@@ -103,200 +98,6 @@ void printSP(int xpos, int ypos, int xtar, int ytar, vector<vector<pair<int, int
 void dirPath(int xpos, int ypos, int xtar, int ytar, vector<vector<pair<int, int>>>& pi, char* &dir,int &length);
 void printDir(char* dir,int length);
 
-int Dins(char a, char b) {               //return the distance between two terrains
-	if (a == 'M' && b == 'M') {
-		return 2;
-	}
-	else if (a == 'T' && b == 'T') {
-		return 2;
-	}
-	else if (a == 'F' && b == 'P') {
-		return 2;
-	}
-	else if (a == 'M' && b == 'M') {
-		return 2;
-	}
-	else if (a == 'F' && b == 'D') {
-		return 2;
-	}
-	else if (a == 'P' && b == 'P') {
-		return 2;
-	}
-	else if (a == 'P' && b == 'D') {
-		return 2;
-	}
-	else if (a == 'P' && b == 'B') {
-		return 2;
-	}
-	else if (a == 'P' && b == 'O') {
-		return 2;
-	}
-	else if (a == 'F' && b == 'P') {
-		return 2;
-	}
-	else if (a == 'F' && b == 'D') {
-		return 2;
-	}
-	else if (a == 'F' && b == 'B') {
-		return 2;
-	}
-	else if (a == 'D' && b == 'D') {
-		return 2;
-	}
-	else if (a == 'D' && b == 'B') {
-		return 2;
-	}
-	else if (a == 'B' && b == 'P') {
-		return 2;
-	}
-	else if (a == 'B' && b == 'D') {
-		return 2;
-	}
-	else if (a == 'B' && b == 'B') {
-		return 2;
-	}
-	else if (a == 'O' && b == 'B') {
-		return 2;
-	}
-	else if (a == 'O' && b == 'O') {
-		return 2;
-	}
-	else if (a == 'T' && b == 'M') {
-		return 1;
-	}
-	else if (a == 'T' && b == 'H') {
-		return 1;
-	}
-	else if (a == 'T' && b == 'P') {
-		return 1;
-	}
-	else if (a == 'T' && b == 'F') {
-		return 1;
-	}
-	else if (a == 'T' && b == 'B') {
-		return 1;
-	}
-	else if (a == 'T' && b == 'D') {
-		return 1;
-	}
-	else if (a == 'M' && b == 'H') {
-		return 1;
-	}
-	else if (a == 'M' && b == 'P') {
-		return 1;
-	}
-	else if (a == 'M' && b == 'F') {
-		return 1;
-	}
-	else if (a == 'M' && b == 'D') {
-		return 1;
-	}
-	else if (a == 'M' && b == 'B') {
-		return 1;
-	}
-	else if (a == 'B' && b == 'O') {
-		return 1;
-	}
-	else if (a == 'M' && b == 'T') {
-		return 3;
-	}
-	else if (a == 'H' && b == 'M') {
-		return 3;
-	}
-	else if (a == 'H' && b == 'H') {
-		return 3;
-	}
-	else if (a == 'H' && b == 'F') {
-		return 3;
-	}
-	else if (a == 'P' && b == 'H') {
-		return 3;
-	}
-	else if (a == 'P' && b == 'F') {
-		return 3;
-	}
-	else if (a == 'F' && b == 'F') {
-		return 3;
-	}
-	else if (a == 'B' && b == 'F') {
-		return 3;
-	}
-	else if (a == 'B' && b == 'H') {
-		return 3;
-	}
-	else if (a == 'O' && b == 'F') {
-		return 3;
-	}
-	else if (a == 'O' && b == 'D') {
-		return 3;
-	}
-	else if (a == 'O' && b == 'P') {
-		return 3;
-	}
-	else if (a == 'H' && b == 'T') {
-		return 4;
-	}
-	else if (a == 'H' && b == 'B') {
-		return 4;
-	}
-	else if (a == 'H' && b == 'O') {
-		return 4;
-	}
-	else if (a == 'P' && b == 'M') {
-		return 4;
-	}
-	else if (a == 'F' && b == 'T') {
-		return 4;
-	}
-	else if (a == 'F' && b == 'M') {
-		return 4;
-	}
-	else if (a == 'F' && b == 'H') {
-		return 4;
-	}
-	else if (a == 'O' && b == 'H') {
-		return 4;
-	}
-	else if (a == 'P' && b == 'T') {
-		return 5;
-	}
-	else if (a == 'F' && b == 'O') {
-		return 4;
-	}
-	else if (a == 'D' && b == 'M') {
-		return 4;
-	}
-	else if (a == 'B' && b == 'M') {
-		return 4;
-	}
-	else if (a == 'O' && b == 'M') {
-		return 4;
-	}
-	else if (a == 'T' && b == 'O') {
-		return 10;
-	}
-	else if (a == 'M' && b == 'O') {
-		return 10;
-	}
-	else if (a == 'D' && b == 'T') {
-		return 10;
-	}
-	else if (a == 'B' && b == 'T') {
-		return 10;
-	}
-	else if (a == 'O' && b == 'T') {
-		return 10;
-	}
-	else if (a == 'D' && b == 'H') {
-		return INT_MAX;
-	}
-	else if (a == 'D' && b == 'P') {
-		return INT_MAX;
-	}
-	else if (a == 'D' && b == 'F') {
-		return INT_MAX;
-	}
-}
 
 void SP(char(*level)[num], int xpos, int ypos, int xtar, int ytar, vector<vector<pair<int, int>>>& pi, vector<vector<int>>& dis,int p, Player* character, string chartype) {
 	int x = xpos;       //xpos,ypos: start postion        xtar,ytar:destination     after we complete the charactor part,we also need to put in the type of charator as a parameter
@@ -583,15 +384,15 @@ void dirPath(int xpos, int ypos, int xtar, int ytar, vector<vector<pair<int, int
 	int j = ytar;
 	int l = length;
 
-	while (i != xpos || y != ypos) {
+	while (i != xpos || j != ypos) {
 		if (pi[i][j].first > i) {
 			dir[--l] = "left";
 		}
 		else if (pi[i][j].second > j) {
-			dir[--l] = "up";
+			dir[--l] = "down";
 		}
 		else if (pi[i][j].second < j) {
-			dir[--l] = "down";
+			dir[--l] = "up";
 		}
 		else  {
 			dir[--l] = "right";
@@ -619,26 +420,6 @@ void resize(int width, int height)           // resizing case on the window
 
 void init()
 {
-    	pi.resize(num);
-	for (int i = 0;i < num;i++) {
-		pi[i].resize(num);
-	}
-	for (int i = 0;i < num;i++) {
-		for (int j = 0;j < num;j++) {
-			pi[i][j].first = -1;
-			pi[i][j].second = -1;
-		}
-	}
-
-		dis.resize(num);
-	for (int i = 0;i < num;i++) {
-		dis[i].resize(num);
-	}
-	for (int i = 0;i < num;i++) {
-		for (int j = 0;j < num;j++) {
-			dis[i][j] = INT_MAX;
-		}
-	}
 
 
 
@@ -911,43 +692,67 @@ void display(void)
          M->drawBackground();           // Display Background
         glPopMatrix();
 
-        for(int i=0;i< OT.size();i++){
+       for(int i=0;i< OT.size();i++){
             OT[i].drawocean();           //display ocean tiles
-            OTHighlight[i].drawocean();  //display ocean highlight tiles
         }
 
         for(int i=0;i< BT.size();i++){
             BT[i].drawbeach();          //display beach tiles
-            BTHighlight[i].drawbeach(); //display beach highlight tiles
         }
 
         for(int i=0;i< DT.size();i++){
             DT[i].drawdesert();         //display desert tiles
-            DTHighlight[i].drawdesert();//display desert highlight tiles
         }
 
         for(int i=0;i< FT.size();i++){
             FT[i].drawforest();         //display forest tiles
-            FTHighlight[i].drawforest();//display forest highlight tiles
         }
 
         for(int i=0;i< PT.size();i++){
             PT[i].drawplain();          //display plain tiles
-            PTHighlight[i].drawplain(); //display plain highlight tiles
         }
 
         for(int i=0;i< HT.size();i++){
             HT[i].drawfoothills();      //display foothills tiles
-            HTHighlight[i].drawfoothills();//display foothills highlight tiles
         }
 
         for(int i=0;i< MT.size();i++){
             MT[i].drawmmountain();      //display mid mountain tiles
+        }
+
+
+        for(int i=0;i< TT.size();i++){
+            TT[i].drawhmountain();      //display high mountain tiles
+        }
+        for(int i=0;i< OT.size();i++){
+            OTHighlight[i].drawocean();  //display ocean highlight tiles
+        }
+
+        for(int i=0;i< BT.size();i++){
+            BTHighlight[i].drawbeach(); //display beach highlight tiles
+        }
+
+        for(int i=0;i< DT.size();i++){
+            DTHighlight[i].drawdesert();//display desert highlight tiles
+        }
+
+        for(int i=0;i< FT.size();i++){
+            FTHighlight[i].drawforest();//display forest highlight tiles
+        }
+
+        for(int i=0;i< PT.size();i++){
+            PTHighlight[i].drawplain(); //display plain highlight tiles
+        }
+
+        for(int i=0;i< HT.size();i++){
+            HTHighlight[i].drawfoothills();//display foothills highlight tiles
+        }
+
+        for(int i=0;i< MT.size();i++){
             MTHighlight[i].drawmmountain();//display mid mountain highlight tiles
         }
 
         for(int i=0;i< TT.size();i++){
-            TT[i].drawhmountain();      //display high mountain tiles
             TTHighlight[i].drawhmountain();//display high mountain highlight tiles
         }
 
@@ -1044,7 +849,7 @@ void movePlayer(Player* character, string direction, int frames){
 
  void idle(void)
 {
-    if(T0->GetTicks()>30 && counter<12)
+    if(T0->GetTicks()>30 && counter<length)
       {
          if(Human->activePlayer)
          movePlayer(Human,dir[counter],6);//if human active, move human
@@ -1119,7 +924,7 @@ void mouse(int btn, int state, int x, int y){
                 destY = yPos;
 
                     if (Human->activePlayer){
-
+                        length = 0;
                         vector<vector<pair<int, int>>>pi;           //pi contains the shortest path
                         pi.resize(num);
                         for (int i = 0;i < num;i++) {
@@ -1142,7 +947,7 @@ void mouse(int btn, int state, int x, int y){
                             }
                         }
                         SP(level, Human->getPlayerLoc().x, Human->getPlayerLoc().y, destX, destY, pi, dis, 0, Human, "Human");      //call function, you can check other starting postion or destination
-                        int length;
+
 
                         dirPath(Human->getPlayerLoc().x, Human->getPlayerLoc().y, destX, destY, pi, length);
 
@@ -1150,16 +955,94 @@ void mouse(int btn, int state, int x, int y){
                     }
 
                     else if (Fish->activePlayer){
+                        length = 0;
+                        vector<vector<pair<int, int>>>pi;           //pi contains the shortest path
+                        pi.resize(num);
+                        for (int i = 0;i < num;i++) {
+                            pi[i].resize(num);
+                        }
+                        for (int i = 0;i < num;i++) {
+                            for (int j = 0;j < num;j++) {
+                                pi[i][j].first = -1;
+                                pi[i][j].second = -1;
+                            }
+                        }
+                        vector<vector<int>> dis;            //dis contains distance
+                        dis.resize(num);
+                        for (int i = 0;i < num;i++) {
+                            dis[i].resize(num);
+                        }
+                        for (int i = 0;i < num;i++) {
+                            for (int j = 0;j < num;j++) {
+                                dis[i][j] = 1000;
+                            }
+                        }
+                        SP(level, Fish->getPlayerLoc().x, Fish->getPlayerLoc().y, destX, destY, pi, dis, 0, Fish, "Fish");      //call function, you can check other starting postion or destination
+
+
+                        dirPath(Fish->getPlayerLoc().x, Fish->getPlayerLoc().y, destX, destY, pi, length);
 
 
                     }
 
                     else if (Bird->activePlayer){
+                        length = 0;
+                        vector<vector<pair<int, int>>>pi;           //pi contains the shortest path
+                        pi.resize(num);
+                        for (int i = 0;i < num;i++) {
+                            pi[i].resize(num);
+                        }
+                        for (int i = 0;i < num;i++) {
+                            for (int j = 0;j < num;j++) {
+                                pi[i][j].first = -1;
+                                pi[i][j].second = -1;
+                            }
+                        }
+                        vector<vector<int>> dis;            //dis contains distance
+                        dis.resize(num);
+                        for (int i = 0;i < num;i++) {
+                            dis[i].resize(num);
+                        }
+                        for (int i = 0;i < num;i++) {
+                            for (int j = 0;j < num;j++) {
+                                dis[i][j] = 1000;
+                            }
+                        }
+                        SP(level, Bird->getPlayerLoc().x, Bird->getPlayerLoc().y, destX, destY, pi, dis, 0, Bird, "Bird");      //call function, you can check other starting postion or destination
+
+
+                        dirPath(Bird->getPlayerLoc().x, Bird->getPlayerLoc().y, destX, destY, pi, length);
 
 
                     }
 
                     else if (Frog->activePlayer){
+                        length = 0;
+                        vector<vector<pair<int, int>>>pi;           //pi contains the shortest path
+                        pi.resize(num);
+                        for (int i = 0;i < num;i++) {
+                            pi[i].resize(num);
+                        }
+                        for (int i = 0;i < num;i++) {
+                            for (int j = 0;j < num;j++) {
+                                pi[i][j].first = -1;
+                                pi[i][j].second = -1;
+                            }
+                        }
+                        vector<vector<int>> dis;            //dis contains distance
+                        dis.resize(num);
+                        for (int i = 0;i < num;i++) {
+                            dis[i].resize(num);
+                        }
+                        for (int i = 0;i < num;i++) {
+                            for (int j = 0;j < num;j++) {
+                                dis[i][j] = 1000;
+                            }
+                        }
+                        SP(level, Frog->getPlayerLoc().x, Frog->getPlayerLoc().y, destX, destY, pi, dis, 0, Frog, "Frog");      //call function, you can check other starting postion or destination
+
+
+                        dirPath(Frog->getPlayerLoc().x, Frog->getPlayerLoc().y, destX, destY, pi, length);
 
 
                     }
