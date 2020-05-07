@@ -64,7 +64,6 @@
 		<Unit filename="include/ocean.h" />
 		<Unit filename="include/plain.h" />
 		<Unit filename="include/player.h" />
-		<Unit filename="include/wall.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Maze.cpp" />
 		<Unit filename="src/Test.cpp" />
@@ -78,7 +77,6 @@
 		<Unit filename="src/ocean.cpp" />
 		<Unit filename="src/plain.cpp" />
 		<Unit filename="src/player.cpp" />
-		<Unit filename="src/wall.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

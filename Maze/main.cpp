@@ -18,7 +18,6 @@
 
 #include <stdlib.h>
 
-#include <wall.h>
 #include <math.h>
 
 #include <beach.h>
@@ -31,7 +30,7 @@
 #include <plain.h>
 
 #include <fstream>
-
+#include <tuple>
 
 #include <bits/stdc++.h>
 
@@ -41,13 +40,16 @@
 
 using namespace std;
 
-const int num = 17;
+const int num = 9;
 Maze *M = new Maze(num);                       // Set Maze grid size
-Player *P = new Player();                    // create player
+Player *Bird = new Player();
+Player *Fish = new Player();
+Player *Frog = new Player();
+Player *Human = new Player();
+
+//Player *P = new Player();                    // create player
 
 char level[num][num];
-
-int nodes[y*gridsize + x]
 
 //vector <wall> W;                                 // wall
 vector<beach>BT;                             //beach array for graphics
@@ -59,8 +61,14 @@ vector<mmountain>MT;                        //mid mountain array for graphics
 vector<ocean>OT;                            //ocean array for graphics
 vector<plain>PT;                            //plain array for graphics
 
-
-wall highlighter[100];
+vector<beach>BTHighlight;                             //beach terrain highlight
+vector<desert>DTHighlight;                            //desert terrain highlight
+vector<foothills>HTHighlight;                        //foothills terrain highlight
+vector<forest>FTHighlight;                           //forest terrain highlight
+vector<hmountain>TTHighlight;                        //high mountain terrain highlight
+vector<mmountain>MTHighlight;                        //mid mountain terrain highlight
+vector<ocean>OTHighlight;                            //ocean terrain highlight
+vector<plain>PTHighlight;                            //plain terrain highlight
 
 Timer *T0 = new Timer();                     // animation timer
 
@@ -70,9 +78,11 @@ Timer *T1 = new Timer();                     // animation timer
 float wWidth, wHeight;                       // display window width and Height
 int xPos,yPos;                               // Viewport mapping
 
-string dir[20];
-int counter = 0;
+string dir[num*num];                             //direction movement array. (num*num should be able to hold any potential paths)
 
+int counter = 0;                        //counter for actions = 0
+
+int dircount = 0;                           //count of how much actions are to be taken
 
 int destX, destY;
 bool playerSelected = false;
@@ -115,120 +125,169 @@ void init()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-    M->generateTerrain();
+    M->generateTerrain(); //calls the terrain generation function
 
     M->loadBackgroundImage("images/bak.jpg");           // Load maze background image
 
-    P->initPlayer(M->getGridSize(),"images/p.png",6);   // initialize player pass grid size,image and number of frames
-    P->placePlayer(3,0);   // Place player
 
 
     for(int i = 0; i < 1; i++){ //loads level from text file and will add graphics according to characters in text file
-        int y = M->getGridSize()-1; //start at top left (y = gridsize-1)
-        //int Wcount = 0;
-        int BTcount = 0;
-        int DTcount = 0;
-        int HTcount = 0;
-        int FTcount = 0;
-        int TTcount = 0;
-        int MTcount = 0;
-        int OTcount = 0;
-        int PTcount = 0;
-        ifstream read;
-        read.open("terrain.txt");
-        string line;
-        while (getline(read,line)){
-            int x = 0;
-            for(char c : line){
+        int y = num-1; //start at top left (gridsize-1)
+        int BTcount = 0; //# of beach tiles
+        int DTcount = 0; //^ but for desert...
+        int HTcount = 0;//'
+        int FTcount = 0;//'
+        int TTcount = 0;//'
+        int MTcount = 0;//'
+        int OTcount = 0;//'
+        int PTcount = 0;//' but for plains
+        ifstream read; //reads file
+        read.open("terrain.txt"); //open terrain.txt file (can open other levels through here as well
+        string line; //to read a line
 
-                level[x][y] = c;
+        while (getline(read,line) && y >= 0){ //while the file hasn't finished reading lines, or y positions in grid haven't been filled
+        int x = 0;
+            for(char c : line){ //read character by character
 
-                if (c == 'O'){
-          /*          W.push_back(wall());
-                    W[Wcount].wallInit(M->getGridSize(),"images/ocean.png");
-                    W[Wcount].placeWall(x,y);
-                    Wcount++;*/
+            if(x < num){ //if x of grid hasn't been filled
+
+                if (c == 'O'){ //if ocean
+
                     OT.push_back(ocean());
-                    OT[OTcount].oceanInit(M->getGridSize(),"images/ocean.png");
+                    OT[OTcount].oceanInit(M->getGridSize(),"images/ocean.png");// Load ocean
                     OT[OTcount].placeocean(x,y);
+
+                    OTHighlight.push_back(ocean());
+                    OTHighlight[OTcount].oceanInit(M->getGridSize(),"images/ocean.png");// Load ocean
+                    OTHighlight[OTcount].placeocean(-1,-1);
+
+                    OTHighlight[OTcount].red= 1.0; //set highlighter color
+                    OTHighlight[OTcount].green= 0.0;
+                    OTHighlight[OTcount].blue= 0.0;
+                    OTHighlight[OTcount].alpha= 0.4;
                     OTcount++;
                 }
 
                 if (c == 'B'){
-/*                    W.push_back(wall());
-                    W[Wcount].wallInit(M->getGridSize(),"images/beach.png");
-                    W[Wcount].placeWall(x,y);
-                    Wcount++;*/
+
                     BT.push_back(beach());
-                    BT[BTcount].beachInit(M->getGridSize(),"images/beach.png");
+                    BT[BTcount].beachInit(M->getGridSize(),"images/beach.png");// Load beach
                     BT[BTcount].placebeach(x,y);
+
+                    BTHighlight.push_back(beach());
+                    BTHighlight[BTcount].beachInit(M->getGridSize(),"images/beach.png");// Load beach
+                    BTHighlight[BTcount].placebeach(-1,-1);
+
+                    BTHighlight[BTcount].red= 1.0;
+                    BTHighlight[BTcount].green= 0.0;
+                    BTHighlight[BTcount].blue= 0.0;
+                    BTHighlight[BTcount].alpha= 0.4;
                     BTcount++;
-                    level[x][y]='B';
+
                 }
 
                 if (c == 'D'){
-/*                    W.push_back(wall());
-                    W[Wcount].wallInit(M->getGridSize(),"images/desert.png");
-                    W[Wcount].placeWall(x,y);
-                    Wcount++;*/
+
                     DT.push_back(desert());
-                    DT[DTcount].desertInit(M->getGridSize(),"images/desert.png");
+                    DT[DTcount].desertInit(M->getGridSize(),"images/desert.png");// Load desert
                     DT[DTcount].placedesert(x,y);
+
+                    DTHighlight.push_back(desert());
+                    DTHighlight[DTcount].desertInit(M->getGridSize(),"images/desert.png");// Load desert
+                    DTHighlight[DTcount].placedesert(-1,-1);
+
+                    DTHighlight[DTcount].red= 1.0;
+                    DTHighlight[DTcount].green= 0.0;
+                    DTHighlight[DTcount].blue= 0.0;
+                    DTHighlight[DTcount].alpha= 0.4;
                     DTcount++;
                 }
 
                 if (c == 'F'){
-/*                    W.push_back(wall());
-                    W[Wcount].wallInit(M->getGridSize(),"images/forest.png");
-                    W[Wcount].placeWall(x,y);
-                    Wcount++;*/
+
                     FT.push_back(forest());
-                    FT[FTcount].forestInit(M->getGridSize(),"images/forest.png");
+                    FT[FTcount].forestInit(M->getGridSize(),"images/forest.png");// Load forest
                     FT[FTcount].placeforest(x,y);
+
+                    FTHighlight.push_back(forest());
+                    FTHighlight[FTcount].forestInit(M->getGridSize(),"images/forest.png");// Load forest
+                    FTHighlight[FTcount].placeforest(-1,-1);
+
+                    FTHighlight[FTcount].red= 1.0;
+                    FTHighlight[FTcount].green= 0.0;
+                    FTHighlight[FTcount].blue= 0.0;
+                    FTHighlight[FTcount].alpha= 0.4;
                     FTcount++;
                 }
 
                 if (c == 'P'){
-/*                   W.push_back(wall());
-                    W[Wcount].wallInit(M->getGridSize(),"images/plains.png");
-                    W[Wcount].placeWall(x,y);
-                    Wcount++;*/
+
                     PT.push_back(plain());
-                    PT[PTcount].plainInit(M->getGridSize(),"images/plains.png");
+                    PT[PTcount].plainInit(M->getGridSize(),"images/plains.png");// Load plains
                     PT[PTcount].placeplain(x,y);
+
+                    PTHighlight.push_back(plain());
+                    PTHighlight[PTcount].plainInit(M->getGridSize(),"images/plains.png");// Load plains
+                    PTHighlight[PTcount].placeplain(-1,-1);
+
+                    PTHighlight[PTcount].red= 1.0;
+                    PTHighlight[PTcount].green= 0.0;
+                    PTHighlight[PTcount].blue= 0.0;
+                    PTHighlight[PTcount].alpha= 0.4;
                     PTcount++;
                 }
                 if (c == 'H'){
-/*                    W.push_back(wall());
-                    W[Wcount].wallInit(M->getGridSize(),"images/foothills.png");
-                    W[Wcount].placeWall(x,y);
-                    Wcount++;*/
+
                     HT.push_back(foothills());
-                    HT[HTcount].foothillsInit(M->getGridSize(),"images/foothills.png");
+                    HT[HTcount].foothillsInit(M->getGridSize(),"images/foothills.png");// Load foothills
                     HT[HTcount].placefoothills(x,y);
+
+                    HTHighlight.push_back(foothills());
+                    HTHighlight[HTcount].foothillsInit(M->getGridSize(),"images/foothills.png");// Load foothills
+                    HTHighlight[HTcount].placefoothills(-1,-1);
+
+                    HTHighlight[HTcount].red= 1.0;
+                    HTHighlight[HTcount].green= 0.0;
+                    HTHighlight[HTcount].blue= 0.0;
+                    HTHighlight[HTcount].alpha= 0.4;
                     HTcount++;
                 }
                 if (c == 'M'){
-/*                    W.push_back(wall());
-                    W[Wcount].wallInit(M->getGridSize(),"images/mountain.png");
-                    W[Wcount].placeWall(x,y);
-                    Wcount++;*/
+
                     MT.push_back(mmountain());
-                    MT[MTcount].mmountainInit(M->getGridSize(),"images/mountain.png");
+                    MT[MTcount].mmountainInit(M->getGridSize(),"images/mountain.png"); // Load mountain
                     MT[MTcount].placemmountain(x,y);
+
+                    MTHighlight.push_back(mmountain());
+                    MTHighlight[MTcount].mmountainInit(M->getGridSize(),"images/mountain.png");// Load mountain
+                    MTHighlight[MTcount].placemmountain(-1,-1);
+
+                    MTHighlight[MTcount].red= 1.0;
+                    MTHighlight[MTcount].green= 0.0;
+                    MTHighlight[MTcount].blue= 0.0;
+                    MTHighlight[MTcount].alpha= 0.4;
                     MTcount++;
                 }
                 if (c == 'T'){
-/*                    W.push_back(wall());
-                    W[Wcount].wallInit(M->getGridSize(),"images/mountainpeak.png");
-                    W[Wcount].placeWall(x,y);
-                    Wcount++;*/
+
                     TT.push_back(hmountain());
-                    TT[TTcount].hmountainInit(M->getGridSize(),"images/mountainpeak.png");
+                    TT[TTcount].hmountainInit(M->getGridSize(),"images/mountainpeak.png"); // Load highmountain
                     TT[TTcount].placehmountain(x,y);
+
+                    TTHighlight.push_back(hmountain());
+                    TTHighlight[TTcount].hmountainInit(M->getGridSize(),"images/mountainpeak.png");// Load highmountain
+                    TTHighlight[TTcount].placehmountain(-1,-1);
+
+                    TTHighlight[TTcount].red= 1.0;
+                    TTHighlight[TTcount].green= 0.0;
+                    TTHighlight[TTcount].blue= 0.0;
+                    TTHighlight[TTcount].alpha= 0.4;
                     TTcount++;
                 }
+                level[x][y] = c; //set level 2-D array to current character
+
                 x++;
+                }
 
             }
             y--;
@@ -236,22 +295,75 @@ void init()
     }
 
 
-/*)
-    for(int i=0; i< M->getGridSize();i++)
-    {
-      W[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
-      W[i].placeWall(i,5);
 
-      highlighter[i].wallInit(M->getGridSize(),"images/wall.png");// Load walls
-      highlighter[i].placeWall(-1,-1);
+    Frog->initPlayer(M->getGridSize(),"images/frog.png",4);
 
-      highlighter[i].red= 1.0;
-      highlighter[i].green= 0.0;
-      highlighter[i].blue= 0.0;
-      highlighter[i].alpha= 0.4;
+
+    if(TT.size() + OT.size() != (num*num)){ //check is there is an element on grid that is not high mountain or ocean
+        for(int i = 0; i < num; i++){
+            for(int j = 0; j < num; j++)
+            if(level[i][j] != 'T' || level[i][j] != 'O'){
+                if ((Bird->getPlayerLoc().x != i && Bird->getPlayerLoc().y != j)&&(Frog->getPlayerLoc().x != i && Frog->getPlayerLoc().y != j)){
+                    Human->initPlayer(M->getGridSize(),"images/p.png",6);
+                    Human->placePlayer(i,j);   // Place human
+                    i = num;
+                    j = num;
+                }
+            }
+        }
     }
-    W[5].placeWall(0,3);                                // moved 5th brick away
-*/
+
+
+    if(OT.size() + BT.size() != 0){ //check is there is an element on grid that is ocean or beach
+        for(int i = 0; i < num; i++){
+            for(int j = 0; j < num; j++)
+            if(level[i][j] == 'O'){//place fish in ocean
+                if ((Bird->getPlayerLoc().x != i && Bird->getPlayerLoc().y != j)&&(Frog->getPlayerLoc().x != i && Frog->getPlayerLoc().y != j)){//check if other character exists on space
+                    Fish->initPlayer(M->getGridSize(),"images/fish.png",4);
+                    Fish->placePlayer(i,j); // Place fish
+                    i = num;
+                    j = num;
+                }
+            }
+        }
+    }
+
+//
+
+     if(DT.size() != (num*num)){ //check is there is an element on grid that is not Desert
+
+        for(int i = num - 1; i >= 0; i--){
+            for(int j = 0; j < num; j++){
+                if(level[i][j] != 'D'){
+                    if ((Human->getPlayerLoc().x != i && Human->getPlayerLoc().y != j)&&(Frog->getPlayerLoc().x != i && Frog->getPlayerLoc().y != j)&&(Fish->getPlayerLoc().x != i && Fish->getPlayerLoc().y != j)){
+                        Bird->initPlayer(M->getGridSize(),"images/bird.png",4); //initialize Bird character
+                        Bird->placePlayer(i,j);   // Place bird
+                        i = -1;
+                        j = num;
+                    }
+                }
+            }
+        }
+    }
+
+
+        if(DT.size() + MT.size() + TT.size() != (num*num)){ //check is there is an element on grid that Frog can be placed on
+
+        for(int i = 0; i < num; i++){
+            for(int j = num - 1; j >= 0; j--){
+                if(level[i][j] != 'T' && level[i][j] != 'M' && level[i][j] != 'D'){
+                    if ((Human->getPlayerLoc().x != i && Human->getPlayerLoc().y != j)&&(Bird->getPlayerLoc().x != i && Bird->getPlayerLoc().y != j)&&(Fish->getPlayerLoc().x != i && Fish->getPlayerLoc().y != j)){
+                        Frog->initPlayer(M->getGridSize(),"images/frog.png",4); //initialize Frog character
+                        Frog->placePlayer(i,j);   // Place frog
+                        i = num;
+                        j = -1;
+                    }
+                }
+            }
+        }
+    }
+
+
 }
 
 void display(void)
@@ -262,80 +374,70 @@ void display(void)
          M->drawBackground();           // Display Background
         glPopMatrix();
 
-        /*for(int i=0; i<M->getGridSize();i++)
-        {
-           W[i].drawWall();
-           highlighter[i].drawWall();
-        }*/
-
-/*        for(int i=0; i< W.size(); i++){
-            W[i].drawWall();
-        }*/
-
         for(int i=0;i< OT.size();i++){
             OT[i].drawocean();           //display ocean tiles
+            OTHighlight[i].drawocean();  //display ocean highlight tiles
         }
 
         for(int i=0;i< BT.size();i++){
             BT[i].drawbeach();          //display beach tiles
+            BTHighlight[i].drawbeach(); //display beach highlight tiles
         }
 
         for(int i=0;i< DT.size();i++){
             DT[i].drawdesert();         //display desert tiles
+            DTHighlight[i].drawdesert();//display desert highlight tiles
         }
 
         for(int i=0;i< FT.size();i++){
             FT[i].drawforest();         //display forest tiles
+            FTHighlight[i].drawforest();//display forest highlight tiles
         }
 
         for(int i=0;i< PT.size();i++){
             PT[i].drawplain();          //display plain tiles
+            PTHighlight[i].drawplain(); //display plain highlight tiles
         }
 
         for(int i=0;i< HT.size();i++){
             HT[i].drawfoothills();      //display foothills tiles
+            HTHighlight[i].drawfoothills();//display foothills highlight tiles
         }
 
         for(int i=0;i< MT.size();i++){
             MT[i].drawmmountain();      //display mid mountain tiles
+            MTHighlight[i].drawmmountain();//display mid mountain highlight tiles
         }
 
         for(int i=0;i< TT.size();i++){
             TT[i].drawhmountain();      //display high mountain tiles
+            TTHighlight[i].drawhmountain();//display high mountain highlight tiles
         }
-
-
 
         glPushMatrix();
             M->drawGrid();              // Draw the grid
         glPopMatrix();
 
         glPushMatrix();
-             P->drawplayer();           // Draw Player move actions
+             Human->drawPlayer();           // Draw Human move actions
         glPopMatrix();
+
+        glPushMatrix();
+             Fish->drawPlayer();           // Draw Fish move actions
+        glPopMatrix();
+
+        glPushMatrix();
+             Bird->drawPlayer();           // Draw Bird move actions
+        glPopMatrix();
+
+        glPushMatrix();
+             Frog->drawPlayer();           // Draw Frog move actions
+        glPopMatrix();
+
 
 
     glutSwapBuffers();
 }
-
-/*
-void playerActions()
-{
-     // Your path code is here
-     // here is player moving example
-     if(P->action ==1)
-     {P->movePlayer("up",6);
-    // Sample of how to get player location
-    //(remove this after you figure it out)
-    // print only when you moving up
-   // cout<<"Player Location  :  "<<P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
-     }
-     else if(P->action ==2)P->movePlayer("down",6);
-     else if(P->action ==3)P->movePlayer("left",6);
-     else if(P->action ==4)P->movePlayer("right",6);
-     else P->movePlayer("stand",6);
-}
-*/
 
 void key(unsigned char key, int x, int y)
 {
@@ -374,7 +476,8 @@ void key(unsigned char key, int x, int y)
     xPos =(int) (posX *M->getGridSize()/2 +M->getGridSize()/2); // update mouse position X
     yPos =(int) (posY *M->getGridSize()/2 +M->getGridSize()/2);
 
-   // cout<<"Mouse Click location : "<< xPos<<" "<<yPos <<endl;   // print out grid value
+    cout<<"Mouse Click location : "<< xPos<<" "<<yPos <<endl;   // print out grid value
+    cout<<"Element at space is: " <<level[xPos][yPos] <<endl;
 }
 
 void movePlayer(Player* character, string direction, int frames){
@@ -389,6 +492,7 @@ void movePlayer(Player* character, string direction, int frames){
         strcpy(buffer,"stand");
         character->placePlayer(character->getPlayerLoc().x,character->getPlayerLoc().y);
         if(T1->GetTicks()>500){
+            dir[counter].clear();
             counter++;
             T1->Reset();
         }
@@ -403,14 +507,16 @@ void movePlayer(Player* character, string direction, int frames){
 
  void idle(void)
 {
-   //Your Code in this section
-    if(T0->GetTicks()>30 && counter<8)
+    if(T0->GetTicks()>30 && counter<dircount)
       {
-
-
-
-
-         movePlayer(P,dir[counter],6);//check for active is inside movePlayer function. add here instead
+         if(Human->activePlayer)
+         movePlayer(Human,dir[counter],6);//if human active, move human
+         if(Fish->activePlayer)
+         movePlayer(Fish,dir[counter],3);//if fish active, move fish
+         if(Bird->activePlayer)
+         movePlayer(Bird,dir[counter],3);//if bird active, move bird
+        if(Frog->activePlayer)
+         movePlayer(Frog,dir[counter],3);//if frog active, move frog
 
          T0->Reset();
       }
@@ -427,11 +533,40 @@ void mouse(int btn, int state, int x, int y){
 
               GetOGLPos(x,y);
 
-              if (xPos == P->getPlayerLoc().x && yPos == P->getPlayerLoc().y){
-                P->activePlayer = true;
+              if (xPos == Human->getPlayerLoc().x && yPos == Human->getPlayerLoc().y){
+
+                Fish->activePlayer = false;
+                Frog->activePlayer = false;
+                Bird->activePlayer = false;
                 playerSelected = true;
+                Human->activePlayer = true;
                 //set all other players to false
               }
+              else if (xPos == Fish->getPlayerLoc().x && yPos == Fish->getPlayerLoc().y){
+                Frog->activePlayer = false;
+                Bird->activePlayer = false;
+                Human->activePlayer = false;
+                playerSelected = true;
+                Fish->activePlayer = true;
+                //set all other players to false
+              }
+                else if (xPos == Bird->getPlayerLoc().x && yPos == Bird->getPlayerLoc().y){
+                Frog->activePlayer = false;
+                Fish->activePlayer = false;
+                Human->activePlayer = false;
+                playerSelected = true;
+                Bird->activePlayer = true;
+                //set all other players to false
+              }
+              else if (xPos == Frog->getPlayerLoc().x && yPos == Frog->getPlayerLoc().y){
+                Fish->activePlayer = false;
+                Bird->activePlayer = false;
+                Human->activePlayer = false;
+                playerSelected = true;
+                Frog->activePlayer = true;
+                //set all other players to false
+              }
+
 
              }
             break;
@@ -442,28 +577,34 @@ void mouse(int btn, int state, int x, int y){
         if(state==GLUT_DOWN){
 
               GetOGLPos(x,y);
-
               if(playerSelected){
                 destX = xPos;
                 destY = yPos;
 
-                highlighter[0].placeWall(7,0);
-                highlighter[1].placeWall(8,0);
+                    if (Human->activePlayer){
 
-                dir[0] = "up";// algorithm called here. Should genereate these steps
-                dir[1] = "up";
-                dir[2] = "up";
-                dir[3] = "right";
-                dir[4] = "right";
-                dir[5] = "down";
-                dir[6] = "left";
+                      }
 
-                counter = 0;
+                    else if (Fish->activePlayer){
 
 
-                playerSelected = false;
-              }
+                    }
 
+                    else if (Bird->activePlayer){
+
+
+                    }
+
+                    else if (Frog->activePlayer){
+
+
+                    }
+
+                        counter = 0;
+
+
+                        playerSelected = false;
+                      }
             }
             break;
     }
@@ -472,7 +613,7 @@ void mouse(int btn, int state, int x, int y){
 
 void Specialkeys(int key, int x, int y)
 {
-     cout<<"Player Location  :  "<<P->getPlayerLoc().x<< "    "<<P->getPlayerLoc().y<<endl;
+    // cout<<"Player Location  :  "<<Human->getPlayerLoc().x<< "    "<<Human->getPlayerLoc().y<<endl;
     switch(key)
     {
  /*   case GLUT_KEY_UP:

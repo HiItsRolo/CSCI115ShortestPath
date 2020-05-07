@@ -30,7 +30,7 @@ class Maze
 
       int getGridSize();                  // return grid size
 
-      void generateTerrain();
+      void generateTerrain();               //generates terrain using Diamond-Square algorithm (requires 2^n +1)
 
     protected:
 
@@ -41,9 +41,9 @@ class Maze
     private:
 
 
-    void squareStep(vector<vector<int>>&,int,int,int,int,int);
-    void diamondStep(vector<vector<int>>&,int,int,int,int,int);
-    void mdp(vector<vector<int>>&,int,int,int);
+    void squareStep(vector<vector<int>>&,int,int,int,int,int); //square step. Parameters are grid vector, x bound, y bound, x index being generated, y index being generated, step
+    void diamondStep(vector<vector<int>>&,int,int,int,int,int); //diamond step. Parameters are same as squarestep
+    void mdp(vector<vector<int>>&,int,int,int); //recursively calls midpoint algorithm. Parameters are: vector of grid, top of x bound (gridsize), top of y bound (gridsize), step
 
       GLuint bakTex;                       // Handler for background texture
 

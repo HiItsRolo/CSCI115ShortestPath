@@ -240,9 +240,10 @@ void Maze::generateTerrain() { //function to procedurally generate terrain using
 
          //   cout << "(" << q << "," << r << ")" << temp[q][r] << endl; // for debugging purposes
         }
-        myfile << "\n"; // creates a new line after each column value for that row has been written
+        myfile << "\n"; // creates a new line after each row has been stored
     }
     myfile.close();
 
+    temp = vector<vector<int>> ();
 }
 
