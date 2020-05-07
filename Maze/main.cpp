@@ -88,13 +88,233 @@ int destX, destY;
 bool playerSelected = false;
 
 
+vector<vector<pair<int, int>>>pi;           //pi contains the shortest path
+	pi.resize(num);
+	for (int i = 0;i < num;i++) {
+		pi[i].resize(num);
+	}
+	for (int i = 0;i < num;i++) {
+		for (int j = 0;j < num;j++) {
+			pi[i][j].first = -1;
+			pi[i][j].second = -1;
+		}
+	}
+	vector<vector<int>> dis;            //dis contains distance
+	dis.resize(num);
+	for (int i = 0;i < num;i++) {
+		dis[i].resize(num);
+	}
+	for (int i = 0;i < num;i++) {
+		for (int j = 0;j < num;j++) {
+			dis[i][j] = INT_MAX;
+		}
+	}
+
+
+
 void display(void);                          // Main Display : this runs in a loop
 void playerActions();
 
+int Dins(char a, char b);
 void SP(char(*level)[num], int xpos, int ypos, int xtar, int ytar, vector<vector<pair<int, int>>>& pi, vector<vector<int>>& dis,int p, Player* character, string chartype);
 void printSP(int xpos, int ypos, int xtar, int ytar, vector<vector<pair<int, int>>>& pi);
 void dirPath(int xpos, int ypos, int xtar, int ytar, vector<vector<pair<int, int>>>& pi, char* &dir,int &length);
 void printDir(char* dir,int length);
+
+int Dins(char a, char b) {               //return the distance between two terrains
+	if (a == 'M' && b == 'M') {
+		return 2;
+	}
+	else if (a == 'T' && b == 'T') {
+		return 2;
+	}
+	else if (a == 'F' && b == 'P') {
+		return 2;
+	}
+	else if (a == 'M' && b == 'M') {
+		return 2;
+	}
+	else if (a == 'F' && b == 'D') {
+		return 2;
+	}
+	else if (a == 'P' && b == 'P') {
+		return 2;
+	}
+	else if (a == 'P' && b == 'D') {
+		return 2;
+	}
+	else if (a == 'P' && b == 'B') {
+		return 2;
+	}
+	else if (a == 'P' && b == 'O') {
+		return 2;
+	}
+	else if (a == 'F' && b == 'P') {
+		return 2;
+	}
+	else if (a == 'F' && b == 'D') {
+		return 2;
+	}
+	else if (a == 'F' && b == 'B') {
+		return 2;
+	}
+	else if (a == 'D' && b == 'D') {
+		return 2;
+	}
+	else if (a == 'D' && b == 'B') {
+		return 2;
+	}
+	else if (a == 'B' && b == 'P') {
+		return 2;
+	}
+	else if (a == 'B' && b == 'D') {
+		return 2;
+	}
+	else if (a == 'B' && b == 'B') {
+		return 2;
+	}
+	else if (a == 'O' && b == 'B') {
+		return 2;
+	}
+	else if (a == 'O' && b == 'O') {
+		return 2;
+	}
+	else if (a == 'T' && b == 'M') {
+		return 1;
+	}
+	else if (a == 'T' && b == 'H') {
+		return 1;
+	}
+	else if (a == 'T' && b == 'P') {
+		return 1;
+	}
+	else if (a == 'T' && b == 'F') {
+		return 1;
+	}
+	else if (a == 'T' && b == 'B') {
+		return 1;
+	}
+	else if (a == 'T' && b == 'D') {
+		return 1;
+	}
+	else if (a == 'M' && b == 'H') {
+		return 1;
+	}
+	else if (a == 'M' && b == 'P') {
+		return 1;
+	}
+	else if (a == 'M' && b == 'F') {
+		return 1;
+	}
+	else if (a == 'M' && b == 'D') {
+		return 1;
+	}
+	else if (a == 'M' && b == 'B') {
+		return 1;
+	}
+	else if (a == 'B' && b == 'O') {
+		return 1;
+	}
+	else if (a == 'M' && b == 'T') {
+		return 3;
+	}
+	else if (a == 'H' && b == 'M') {
+		return 3;
+	}
+	else if (a == 'H' && b == 'H') {
+		return 3;
+	}
+	else if (a == 'H' && b == 'F') {
+		return 3;
+	}
+	else if (a == 'P' && b == 'H') {
+		return 3;
+	}
+	else if (a == 'P' && b == 'F') {
+		return 3;
+	}
+	else if (a == 'F' && b == 'F') {
+		return 3;
+	}
+	else if (a == 'B' && b == 'F') {
+		return 3;
+	}
+	else if (a == 'B' && b == 'H') {
+		return 3;
+	}
+	else if (a == 'O' && b == 'F') {
+		return 3;
+	}
+	else if (a == 'O' && b == 'D') {
+		return 3;
+	}
+	else if (a == 'O' && b == 'P') {
+		return 3;
+	}
+	else if (a == 'H' && b == 'T') {
+		return 4;
+	}
+	else if (a == 'H' && b == 'B') {
+		return 4;
+	}
+	else if (a == 'H' && b == 'O') {
+		return 4;
+	}
+	else if (a == 'P' && b == 'M') {
+		return 4;
+	}
+	else if (a == 'F' && b == 'T') {
+		return 4;
+	}
+	else if (a == 'F' && b == 'M') {
+		return 4;
+	}
+	else if (a == 'F' && b == 'H') {
+		return 4;
+	}
+	else if (a == 'O' && b == 'H') {
+		return 4;
+	}
+	else if (a == 'P' && b == 'T') {
+		return 5;
+	}
+	else if (a == 'F' && b == 'O') {
+		return 4;
+	}
+	else if (a == 'D' && b == 'M') {
+		return 4;
+	}
+	else if (a == 'B' && b == 'M') {
+		return 4;
+	}
+	else if (a == 'O' && b == 'M') {
+		return 4;
+	}
+	else if (a == 'T' && b == 'O') {
+		return 10;
+	}
+	else if (a == 'M' && b == 'O') {
+		return 10;
+	}
+	else if (a == 'D' && b == 'T') {
+		return 10;
+	}
+	else if (a == 'B' && b == 'T') {
+		return 10;
+	}
+	else if (a == 'O' && b == 'T') {
+		return 10;
+	}
+	else if (a == 'D' && b == 'H') {
+		return INT_MAX;
+	}
+	else if (a == 'D' && b == 'P') {
+		return INT_MAX;
+	}
+	else if (a == 'D' && b == 'F') {
+		return INT_MAX;
+	}
+}
 
 void SP(char(*level)[num], int xpos, int ypos, int xtar, int ytar, vector<vector<pair<int, int>>>& pi, vector<vector<int>>& dis,int p, Player* character, string chartype) {
 	int x = xpos;       //xpos,ypos: start postion        xtar,ytar:destination     after we complete the charactor part,we also need to put in the type of charator as a parameter
@@ -110,7 +330,7 @@ void SP(char(*level)[num], int xpos, int ypos, int xtar, int ytar, vector<vector
 	while (xtar != x || ytar != y) {          //A modified version of Dijkstra's algorithm
 		bool trap = false;                //To mark whether or not to enter a dead end
 		pair<int, int>minval;               //to contain the coordinate of the shortest postion that we should move to next step
-		if (p == 0) {          //0:human
+		if (character == Human) {          //0:human
 			if (level[x - 1][y] != 'W' && level[x - 1][y] != 'T' && color[x - 1][y] == 0 && x - 1 >= 0) {  //Determine if it is accessible
 				int desT = character->Dmat(level[x][y], level[x - 1][y],chartype);   //the distance of top cell
 				trap = true;
@@ -157,9 +377,9 @@ void SP(char(*level)[num], int xpos, int ypos, int xtar, int ytar, vector<vector
 			if (trap == false) {           //if this is a dead end,Find new postion
 				int a = 0;
 				int b = 0;
-				while (level[a][b] == 1 || dis[a][b] == 1000) {
+				while (color[a][b] == 1 || dis[a][b] == 1000) {
 					a++;
-					while (level[a][b] == 1 || dis[a][b] == 1000) {
+					while (color[a][b] == 1 || dis[a][b] == 1000) {
 						b++;
 					}
 				}
@@ -173,7 +393,7 @@ void SP(char(*level)[num], int xpos, int ypos, int xtar, int ytar, vector<vector
 				color[x][y] = 1;
 			}
 		}
-		else if (p == 1) {          //1:bird
+		else if (character == Bird) {          //1:bird
 			if (level[x - 1][y] != 'D' && color[x - 1][y] == 0 && x - 1 >= 0) {  //Determine if it is accessible
 				int desT = character->Dmat(level[x][y], level[x - 1][y],chartype);   //the distance of top cell
 				trap = true;
@@ -220,9 +440,9 @@ void SP(char(*level)[num], int xpos, int ypos, int xtar, int ytar, vector<vector
 			if (trap == false) {           //if this is a dead end,Find new postion
 				int a = 0;
 				int b = 0;
-				while (level[a][b] == 1 || dis[a][b] == 1000) {
+				while (color[a][b] == 1 || dis[a][b] == 1000) {
 					a++;
-					while (level[a][b] == 1 || dis[a][b] == 1000) {
+					while (color[a][b] == 1 || dis[a][b] == 1000) {
 						b++;
 					}
 				}
@@ -236,7 +456,7 @@ void SP(char(*level)[num], int xpos, int ypos, int xtar, int ytar, vector<vector
 				color[x][y] = 1;
 			}
 		}
-		else if (p == 2) {          //2:fish
+		else if (character == Fish) {          //2:fish
 		if (level[x - 1][y] == 'W' && color[x - 1][y] == 0 && x - 1 >= 0) {  //Determine if it is accessible
 			int desT = character->Dmat(level[x][y], level[x - 1][y],chartype);   //the distance of top cell
 			trap = true;
@@ -283,9 +503,9 @@ void SP(char(*level)[num], int xpos, int ypos, int xtar, int ytar, vector<vector
 		if (trap == false) {           //if this is a dead end,Find new postion
 			int a = 0;
 			int b = 0;
-			while (level[a][b] == 1 || dis[a][b] == 1000) {
+			while (color[a][b] == 1 || dis[a][b] == 1000) {
 				a++;
-				while (level[a][b] == 1 || dis[a][b] == 1000) {
+				while (color[a][b] == 1 || dis[a][b] == 1000) {
 					b++;
 				}
 			}
@@ -346,9 +566,9 @@ void SP(char(*level)[num], int xpos, int ypos, int xtar, int ytar, vector<vector
 		if (trap == false) {           //if this is a dead end,Find new postion
 			int a = 0;
 			int b = 0;
-			while (level[a][b] == 1 || dis[a][b] == 1000) {
+			while (color[a][b] == 1 || dis[a][b] == 1000) {
 				a++;
-				while (level[a][b] == 1 || dis[a][b] == 1000) {
+				while (color[a][b] == 1 || dis[a][b] == 1000) {
 					b++;
 				}
 			}
